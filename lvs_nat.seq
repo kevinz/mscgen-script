@@ -1,0 +1,27 @@
+#MSC for lvs in nat mode
+msc{
+        hscale = "2";
+        Client,LB,RS;
+
+        Client=>Client [ label= "req(vip:vport)"];
+        Client->LB [ label = "(cip:cport)->(vip:vport)"];
+        LB=>LB     [ label = "belongs_to_an_active_conn?"];
+        LB=>LB     [ label = "is_new_conn?"];
+        LB=>LB     [ label = "is_persistent?"];
+        LB=>LB     [ label = "do_schedule()"];
+        LB=>LB     [ label = "decide_rs()"];
+        LB=>LB     [ label = "snat(cip->dip,cport->vport)"];
+        LB=>LB     [ label = "dnat(vip->rip,vport->rport)"];
+        LB->RS     [ label = "(dip:vport)->(rip:rport)"];
+        --- [ label = "Packet is delivered to real server"];
+        ...;
+        RS=>RS     [ label = "route_to(LB)"];
+        RS->LB     [ label = "(rip:rport)->(vip:vport)"];
+        LB=>LB     [ label = "snat(rip->vip,rport->vport)"];
+        LB=>LB     [ label = "dnat(dip->cip,vport->cport)"];
+        LB->Client [ label = "(vip:vport)->(cip:cport)"];
+        --- [ label = "Packet go back to client"];
+}
+
+
+

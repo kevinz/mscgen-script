@@ -1,0 +1,23 @@
+#MSC for lvs in DR addressble mode
+msc{
+        hscale = "2";
+        Client,LB,RS;
+
+        Client=>Client [ label= "req(vip:vport)"];
+        Client->LB [ label = "(cip:cport)->(vip:vport)"];
+        LB=>LB     [ label = "belongs_to_an_active_conn?"];
+        LB=>LB     [ label = "is_new_conn?"];
+        LB=>LB     [ label = "is_persistent?"];
+        LB=>LB     [ label = "do_schedule()"];
+        LB=>LB     [ label = "decide_rs()"];
+        LB=>LB     [ label = "modify-mac(vmac->rmac)"];
+        
+        LB->RS     [ label = "(cip:cport)->(vip:vport)"];
+        --- [ label = "Packet is delivered to real server"];
+        ...;
+        RS=>RS     [ label = "route_to(LB or GW)"];
+        RS=>Client [ label = "(vip:vport)->(cip:cport)"];
+        --- [ label = "Packet go back to client"];
+}
+
+
