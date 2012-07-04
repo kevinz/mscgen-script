@@ -20,7 +20,7 @@ msc{
         LB=>LB     [ label = "snat(rip->vip,rport->vport)"];
         LB=>LB     [ label = "dnat(dip->cip,vport->cport)"];
         LB->Client [ label = "(vip:vport)->(cip:cport)"];
-        --- [ label = "Packet go back to client"];
+        --- [ label = "Packet goes back to client"];
 }
 
 

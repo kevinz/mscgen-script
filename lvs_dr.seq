@@ -16,8 +16,10 @@ msc{
         --- [ label = "Packet is delivered to real server"];
         ...;
         RS=>RS     [ label = "route_to(LB or GW)"];
-        RS=>Client [ label = "(vip:vport)->(cip:cport)"];
-        --- [ label = "Packet go back to client"];
+        RS>>Client [ label = "possible path:(vip:vport)->(cip:cport)"];
+        RS->LB     [ label = "(vip:vport)->(cip:cport)"];
+        LB->Client [ label = "(vip:vport)->(cip:cport)"];
+        --- [ label = "Packet goes back to client"];
 }
 
 

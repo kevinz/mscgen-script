@@ -20,13 +20,18 @@ msc{
         LB->RS     [ label = "(cip:cport)->(oip:oport)"];
         --- [ label = "Packet is delivered to real server"];
         ...;
-        RS=>RS     [ label = "do some trick"];
-        RS->OS     [ label = "?->(oip:oport)"];
+        RS=>RS     [ label = "nf_hook->dnat(oip->rip,oport->rport)"];
+        RS=>RS     [ label = "receive()"];
+        RS=>RS     [ label = "proxy_www(URI)"];
+        RS->OS     [ label = "(rip_www:rport_www)->(oip:oport)"];
         --- [ label = "Packet is delivered to the original server"];
-        OS->RS     [ label = "(oip:oport)->?"];
+        OS->RS     [ label = "(oip:oport)->(rip_www:rport_www)"];
         RS=>RS     [ label = "route_to(LB or GW)"];
-        RS=>Client [ label = "(oip:oport)->(cip:cport)"];
-        --- [ label = "Packet go back to the client"];
+        --- [ label = "Packet goes back to real server"];
+        RS->LB [ label = "(oip:oport)->(cip:cport)"];
+        RS>>Client [ label = "possible path:(oip:oport)->(cip:cport)"];
+        LB->Client [ label = "(oip:oport)->(cip:cport)"];
+        --- [ label = "Packet goes back to the client"];
 }
 
 
